@@ -12,12 +12,14 @@ Put .cake files in a nuget package and reference the nuget like this #load "nuge
 The config.json file handles configurations for youre nuget package create this file at the root of the scripts.
 
 #### Example of a config.json file
+```
 {
   "FileOrder": [
     "pub.cake",
     "lib.cake"
   ]
 }
+```
 
 #### Config Definitions
 FileOrder: Defines a script load order, scriptA will load before scriptB.
