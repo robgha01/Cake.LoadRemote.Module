@@ -15,8 +15,8 @@ The config.json file handles configurations for youre nuget package create this 
 ```
 {
   "FileOrder": [
-    "pub.cake",
-    "lib.cake"
+    "scriptA.cake",
+    "scriptB.cake"
   ]
 }
 ```
