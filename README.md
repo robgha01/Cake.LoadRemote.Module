@@ -1,9 +1,6 @@
-# Cake.Modules
-Modules for cakebuild.
-
-## Cake.LoadRemote.Module
-Extend #load with nuget support
-this module will download and install the nuget package and reference the scripts where the #load directive is defined.
+# Cake.LoadRemote.Module
+Module for cakebuild that extends #load processor directive with nuget support.
+This module will download and install the nuget package and reference the scripts where the #load directive is defined.
 
 ### Installation
 Unzip the release file for "Cake.LoadRemote.Module" in youre modules directory.
