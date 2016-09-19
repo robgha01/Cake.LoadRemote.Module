@@ -1,32 +1,55 @@
-﻿using System;
-using Cake.Core;
-using Cake.Core.Factories;
-using Cake.Core.Scripting.Analysis;
-using Cake.Core.Scripting.Processors;
-
-namespace Cake.LoadRemote.Module
+﻿namespace Cake.LoadRemote.Module
 {
-    //[CakeProcessor]
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+
+    using Cake.Core;
+    using Cake.Core.Factories;
+    using Cake.Core.Scripting.Analysis;
+    using Cake.Core.Scripting.Processors;
+
+    /// <summary>
+    /// The load remote processor.
+    /// </summary>
     public sealed class LoadRemoteProcessor : UriDirectiveProcessor
     {
-        private readonly ICakeComponentFactory _componentFactory;
-        private readonly IProcessorExtension _processorExtension;
+        /// <summary>
+        /// The component factory.
+        /// </summary>
+        private readonly ICakeComponentFactory componentFactory;
 
-        public LoadRemoteProcessor(IProcessorExtension processorExtension, ICakeEnvironment environment) : base(environment)
+        /// <summary>
+        /// The processor extension.
+        /// </summary>
+        private readonly IProcessorExtension processorExtension;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoadRemoteProcessor"/> class.
+        /// </summary>
+        /// <param name="processorExtension">
+        /// The processor extension.
+        /// </param>
+        /// <param name="environment">
+        /// The environment.
+        /// </param>
+        public LoadRemoteProcessor(IProcessorExtension processorExtension, ICakeEnvironment environment)
+            : base(environment)
         {
-            _processorExtension = processorExtension;
-            _componentFactory = new CakeComponentFactory();
+            this.processorExtension = processorExtension;
+            componentFactory = new CakeComponentFactory();
         }
 
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
+        protected override void AddToContext(IScriptAnalyzerContext context, Uri uri)
+        {
+            var package = componentFactory.CreatePackageReference(uri);
+            context.Script.ProcessorValues.Add(processorExtension, package);
+        }
+
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
         protected override string GetDirectiveName()
         {
             return Constants.DirectiveName;
-        }
-
-        protected override void AddToContext(IScriptAnalyzerContext context, Uri uri)
-        {
-            var package = _componentFactory.CreatePackageReference(uri);
-            context.Script.ProcessorValues.Add(_processorExtension, package);
         }
     }
 }
