@@ -72,11 +72,25 @@
                     throw new CakeException(message);
                 }
 
+                // Include any dll files
+                DirectoryPath packagePath = toolsPath.Combine(new DirectoryPath(packageReference.Package));
+                var packageDllFiles = Directory.GetFiles(packagePath.FullPath, "*.dll", SearchOption.AllDirectories);
+                foreach (var dllFile in packageDllFiles)
+                {
+                    var absolutePath = new FilePath(dllFile).MakeAbsolute(Environment).FullPath;
+                    if (scriptAnalyzerContext.Script.References.Contains(absolutePath))
+                    {
+                        continue;
+                    }
+
+                    scriptAnalyzerContext.Script.References.Add(dllFile);
+                }
+
                 var packageDirectory = files.First().Path.GetDirectory();
+                
                 ConfigEntity config = GetConfig(packageDirectory);
                 files = ReArrange(files, config);
-                var keyValues = files.Select(
-                    f => new KeyValuePair<PackageReference, FilePath>(packageReference, f.Path));
+                var keyValues = files.Select(f => new KeyValuePair<PackageReference, FilePath>(packageReference, f.Path));
                 RecursiveInstallNugetScripts(ref result, keyValues, scriptAnalyzerContext, toolsPath);
             }
         }
